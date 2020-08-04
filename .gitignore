@@ -3,3 +3,4 @@
 /docs
 /phpDocumentor.phar
 tests/tmp
+.phpunit.result.cache
