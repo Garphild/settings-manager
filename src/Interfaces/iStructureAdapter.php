@@ -2,7 +2,7 @@
 
 namespace Garphild\SettingsManager\Interfaces;
 
-use Settings\Models\SettingsItem;
+use Garphild\SettingsManager\Models\SettingsItem;
 
 interface iStructureAdapter {
   function load();
@@ -10,4 +10,5 @@ interface iStructureAdapter {
   function getValues();
   function createItem(string $name, SettingsItem $item);
   function removeItem(string $name);
+  function haveItem(string $name): bool;
 }

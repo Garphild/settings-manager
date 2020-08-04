@@ -2,3 +2,4 @@
 /.idea
 /docs
 /phpDocumentor.phar
+tests/tmp

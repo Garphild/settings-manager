@@ -18,12 +18,12 @@ class ManagerExistException extends \Exception {
    * Constructor
    *
    * @param $message message with param %PARAM% which replace manager name
-   * @param string $managerName name of manager who fires exception
+   * @param string $path name of manager who fires exception
    * @param int $code error code (default: ErrorCodes::PROPERTY_EXISTS)
    * @param Exception|null $previous
    */
-  public function __construct($message, $managerName = '', $code = ErrorCodes::PROPERTY_EXISTS, Exception $previous = null) {
-    $this->managerName = $managerName;
+  public function __construct($message, $path = '', $code = ErrorCodes::PROPERTY_EXISTS, Exception $previous = null) {
+    $this->managerName = $path;
     parent::__construct($this->getMessageAsString(), $code, $previous);
   }
 
