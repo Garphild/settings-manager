@@ -78,4 +78,13 @@ class JsonFileStructureAdapter implements iStructureAdapter {
   {
     return isset($this->parsed[$name]);
   }
+
+  function getDefaultValues()
+  {
+    $tmp = [];
+    foreach($this->parsed as $name=>$value) {
+      $tmp[$name] = $value->default;
+    }
+    return $tmp;
+  }
 }

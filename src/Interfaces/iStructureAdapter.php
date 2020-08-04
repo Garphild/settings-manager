@@ -8,6 +8,7 @@ interface iStructureAdapter {
   function load();
   function save();
   function getValues();
+  function getDefaultValues();
   function createItem(string $name, SettingsItem $item);
   function removeItem(string $name);
   function haveItem(string $name): bool;

@@ -58,4 +58,10 @@ class JsonFileStructureAdapterTest extends TestCase
     $this->assertSame(0, count($adapter->getValues()));
     $this->assertFalse($adapter->haveItem($itemName));
   }
+  public function testGetDefaultValues() {
+    $itemName = "testSingle";
+    $adapter = new JsonFileStructureAdapter("./mocks", 'defaultSingle.json');
+    $values = $adapter->getDefaultValues();
+    $this->assertSame("0", $values['testSingle']);
+  }
 }
