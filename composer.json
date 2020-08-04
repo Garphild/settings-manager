@@ -1,0 +1,23 @@
+{
+    "name": "garphild/settings-manager",
+    "description": "Settings manager",
+    "version": "1.0.0",
+    "type": "library",
+    "license": "MIT",
+    "require-dev": {
+        "phpunit/phpunit": "^9.2"
+    },
+    "authors": [
+        {
+            "name": "Serhii Kondrashov",
+            "email": "garphild28@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Garphild\\SettingsManager": "src/"
+        }
+    }
+}
