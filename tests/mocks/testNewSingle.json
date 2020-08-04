@@ -1,5 +1,5 @@
 {
-    "testSingle": {
+    "testNewSingle": {
         "default": 1,
         "dataType": "boolean",
         "module": "",

@@ -64,4 +64,22 @@ class JsonFileStructureAdapterTest extends TestCase
     $values = $adapter->getDefaultValues();
     $this->assertSame("0", $values['testSingle']);
   }
+  public function testSave() {
+    $itemName = "testNewSingle";
+    if (file_exists("./mocks/{$itemName}.json")) unlink("./mocks/{$itemName}.json");
+    copy("./mocks/defaultEmpty.json", "./mocks/{$itemName}.json");
+    $adapter = new JsonFileStructureAdapter("./mocks", "{$itemName}.json");
+    $this->assertCount(0, $adapter->getValues());
+    $item = new SettingsItem(['default' => 1]);
+    $adapter->createItem($itemName, $item);
+    $adapter->save();
+    $this->assertFileEquals(
+      "./mocks/testNewSingleEtalon.json",
+      "./mocks/{$itemName}.json"
+    );
+//    $this->assertEquals(
+//      trim(file_get_contents("./mocks/testNewSingleEtalon.json")),
+//      trim(file_get_contents("./mocks/{$itemName}.json"))
+//    );
+  }
 }
