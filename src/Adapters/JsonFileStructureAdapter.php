@@ -23,7 +23,7 @@ class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
     return $this;
   }
 
-  function save(): JsonFileSettingsAdapter
+  function save(): JsonFileStructureAdapter
   {
     $this->file = json_encode($this->parsed, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT, 9999999);
     file_put_contents($this->getFilename(), $this->file);

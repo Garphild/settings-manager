@@ -12,4 +12,8 @@ interface iStructureAdapter {
   function createItem(string $name, SettingsItem $item);
   function removeItem(string $name);
   function haveItem(string $name): bool;
+  function getItemNames();
+  function getItemNamesForApi();
+  function getDefaultValuesForApi();
+  function getValue($name);
 }
