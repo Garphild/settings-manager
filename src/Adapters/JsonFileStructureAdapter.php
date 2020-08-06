@@ -2,6 +2,7 @@
 
 namespace Garphild\SettingsManager\Adapters;
 
+use Garphild\SettingsManager\Errors\PropertyNotExistException;
 use Garphild\SettingsManager\Interfaces\iStructureAdapter;
 use Garphild\SettingsManager\Models\SettingsItem;
 use Garphild\SettingsManager\Errors\MissingFileException;
@@ -62,5 +63,32 @@ class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
       $tmp[$name] = $value->default;
     }
     return $tmp;
+  }
+
+  function getValue($name)
+  {
+    if (
+      isset($this->parsed[$name])
+      && $this->parsed[$name] instanceof SettingsItem
+      && isset($this->parsed[$name]->default)
+    ) {
+      return $this->parsed[$name]->default;
+    }
+    throw new PropertyNotExistException(null, $name);
+  }
+
+  function getItemNames()
+  {
+    // TODO: Implement getItemNames() method.
+  }
+
+  function getItemNamesForApi()
+  {
+    // TODO: Implement getItemNamesForApi() method.
+  }
+
+  function getDefaultValuesForApi()
+  {
+    // TODO: Implement getDefaultValuesForApi() method.
   }
 }

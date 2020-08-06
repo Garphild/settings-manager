@@ -2,6 +2,7 @@
 require("../vendor/autoload.php");
 
 use Garphild\SettingsManager\Adapters\JsonFileStructureAdapter;
+use Garphild\SettingsManager\Errors\PropertyNotExistException;
 use Garphild\SettingsManager\Models\SettingsItem;
 use PHPUnit\Framework\TestCase;
 
@@ -81,5 +82,18 @@ class JsonFileStructureAdapterTest extends TestCase
 //      trim(file_get_contents("./mocks/testNewSingleEtalon.json")),
 //      trim(file_get_contents("./mocks/{$itemName}.json"))
 //    );
+  }
+  public function testGetValue() {
+    $itemName = "testSingle";
+    $filename = 'defaultSingle';
+    $adapter = new JsonFileStructureAdapter("./mocks", "{$filename}.json");
+    $this->assertSame("0", $adapter->getValue($itemName));
+  }
+  public function testGetValueFail() {
+    $itemName = "testSingleFail";
+    $filename = 'defaultSingle';
+    $adapter = new JsonFileStructureAdapter("./mocks", "{$filename}.json");
+    $this->expectException(PropertyNotExistException::class);
+    $adapter->getValue($itemName);
   }
 }
