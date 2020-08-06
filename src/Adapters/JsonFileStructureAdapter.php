@@ -79,7 +79,7 @@ class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
 
   function getItemNames()
   {
-    // TODO: Implement getItemNames() method.
+    return array_keys($this->parsed);
   }
 
   function getItemNamesForApi()

@@ -96,4 +96,28 @@ class JsonFileStructureAdapterTest extends TestCase
     $this->expectException(PropertyNotExistException::class);
     $adapter->getValue($itemName);
   }
+  public function testGetItemNames() {
+    $itemName = "testSingle";
+    $filename = 'defaultWithApiRestriciton';
+    $adapter = new JsonFileStructureAdapter("./mocks", "{$filename}.json");
+    $names = $adapter->getItemNames();
+    $this->assertNotSame(['testSingle'], $names);
+    $this->assertSame(['testSingle', 'testSingleRestricted'], $names);
+  }
+  public function testGetItemNamesForApi() {
+    $itemName = "testSingle";
+    $filename = 'defaultWithApiRestriciton';
+    $adapter = new JsonFileStructureAdapter("./mocks", "{$filename}.json");
+    $names = $adapter->getItemNamesForApi();
+    $this->assertSame(['testSingle'], $names);
+    $this->assertNotSame(['testSingle', 'testSingleRestricted'], $names);
+  }
+  public function testGetDefaultValuesForApi() {
+    $itemName = "testSingle";
+    $filename = 'defaultWithApiRestriciton';
+    $adapter = new JsonFileStructureAdapter("./mocks", "{$filename}.json");
+    $names = $adapter->getDefaultValuesForApi();
+    $this->assertSame(['testSingle' => '0'], $names);
+    $this->assertNotSame(['testSingle' => '0', 'testSingleRestricted' => '1'], $names);
+  }
 }
