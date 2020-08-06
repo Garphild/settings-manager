@@ -91,6 +91,9 @@ class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
 
   function getDefaultValuesForApi()
   {
-    // TODO: Implement getDefaultValuesForApi() method.
+    return array_map(
+      function ($value) { return $value->default;},
+      array_filter($this->parsed, function ($value) { return $value->showToApi; })
+    );
   }
 }
