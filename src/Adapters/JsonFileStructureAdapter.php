@@ -5,13 +5,26 @@ namespace Garphild\SettingsManager\Adapters;
 use Garphild\SettingsManager\Errors\PropertyNotExistException;
 use Garphild\SettingsManager\Interfaces\iStructureAdapter;
 use Garphild\SettingsManager\Models\SettingsItem;
-use Garphild\SettingsManager\Errors\MissingFileException;
 use Garphild\SettingsManager\Errors\PropertyExistException;
 
 class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
   public function __construct($basePath, $structureFileName) {
     parent::__construct($basePath, $structureFileName);
     $this->load();
+  }
+
+  function isPublic($name) {
+    return $this->parsed[$name]->isPublic();
+  }
+
+  function makePublic($name) {
+    $this->parsed[$name]->makePublic();
+    return $this;
+  }
+
+  function makePrivate($name) {
+    $this->parsed[$name]->makePrivate();
+    return $this;
   }
 
   function load()
@@ -31,7 +44,7 @@ class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
     return $this;
   }
 
-  function getValues()
+  function getItems()
   {
     return $this->parsed;
   }
@@ -39,7 +52,7 @@ class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
   public function createItem(string $name, SettingsItem $item): JsonFileStructureAdapter
   {
     if (isset($this->parsed[$name])) {
-      throw new PropertyExistException("Property %PROPERTY% already exist");
+      throw new PropertyExistException(null, $name);
     }
     $this->parsed[$name] = $item;
     return $this;
@@ -56,6 +69,9 @@ class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
     return isset($this->parsed[$name]);
   }
 
+  /**
+   * @return array
+   */
   public function getDefaultValues()
   {
     $tmp = [];
@@ -65,6 +81,11 @@ class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
     return $tmp;
   }
 
+  /**
+   * @param string $name
+   * @return string
+   * @throws PropertyNotExistException
+   */
   function getValue($name)
   {
     if (
@@ -77,23 +98,45 @@ class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
     throw new PropertyNotExistException(null, $name);
   }
 
+  /**
+   * @param string $name
+   * @return SettingsItem
+   * @throws PropertyNotExistException
+   */
+  function getItem($name) {
+    if (
+      $this->haveItem($name)
+    ) {
+      return $this->parsed[$name];
+    }
+    throw new PropertyNotExistException(null, $name);
+  }
+
   function getItemNames()
   {
     return array_keys($this->parsed);
   }
 
-  function getItemNamesForApi()
+  function getItemNamesForPublic()
   {
     return array_keys(
       array_filter($this->parsed, function ($value) { return $value->showToApi; })
     );
   }
 
-  function getDefaultValuesForApi()
+  function getDefaultValuesForPublic()
   {
     return array_map(
       function ($value) { return $value->default;},
       array_filter($this->parsed, function ($value) { return $value->showToApi; })
     );
+  }
+
+  function setValue($name, $value)
+  {
+    if (!$this->haveItem($name)) {
+      throw new PropertyNotExistException(null, $name);
+    }
+    $this->parsed[$name]->default = $value;
   }
 }

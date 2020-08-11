@@ -28,6 +28,20 @@ class SettingsItem {
     }
   }
 
+  function makePublic() {
+    $this->showToApi = true;
+    return $this;
+  }
+
+  function makePrivate() {
+    $this->showToApi = false;
+    return $this;
+  }
+
+  function isPublic() {
+    return $this->showToApi;
+  }
+
   function setTypeBoolean() {
     $this->dataType = self::TYPE_BOOLEAN;
     return $this;

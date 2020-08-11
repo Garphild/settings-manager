@@ -1,0 +1,92 @@
+{
+    "testSingle": {
+        "default": "0",
+        "dataType": "boolean",
+        "module": "",
+        "name": "",
+        "allowToApply": {
+            "global": true,
+            "group": true,
+            "user": true
+        },
+        "values": [],
+        "allowUserChange": false,
+        "settingsGroup": "Main",
+        "showToApi": false
+    },
+    "testSingleForGroup": {
+        "default": "0",
+        "dataType": "boolean",
+        "module": "",
+        "name": "",
+        "allowToApply": {
+            "global": true,
+            "group": true,
+            "user": true
+        },
+        "values": [],
+        "allowUserChange": false,
+        "settingsGroup": "Main",
+        "showToApi": true
+    },
+    "testSingleForUser": {
+        "default": "0",
+        "dataType": "boolean",
+        "module": "",
+        "name": "",
+        "allowToApply": {
+            "global": true,
+            "group": true,
+            "user": true
+        },
+        "values": [],
+        "allowUserChange": false,
+        "settingsGroup": "Main",
+        "showToApi": true
+    },
+    "testSingleForUserAdd": {
+        "default": "0",
+        "dataType": "boolean",
+        "module": "",
+        "name": "",
+        "allowToApply": {
+            "global": true,
+            "group": true,
+            "user": true
+        },
+        "values": [],
+        "allowUserChange": false,
+        "settingsGroup": "Main",
+        "showToApi": true
+    },
+    "testSingleForGroupAdd": {
+        "default": "0",
+        "dataType": "boolean",
+        "module": "",
+        "name": "",
+        "allowToApply": {
+            "global": true,
+            "group": true,
+            "user": true
+        },
+        "values": [],
+        "allowUserChange": false,
+        "settingsGroup": "Main",
+        "showToApi": true
+    },
+    "testSingleOnlyStructure": {
+        "default": "0",
+        "dataType": "boolean",
+        "module": "",
+        "name": "",
+        "allowToApply": {
+            "global": true,
+            "group": true,
+            "user": true
+        },
+        "values": [],
+        "allowUserChange": false,
+        "settingsGroup": "Main",
+        "showToApi": true
+    }
+}

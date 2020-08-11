@@ -18,12 +18,12 @@ class JsonFileStructureAdapterTest extends TestCase
   }
   function testCreateGoodDirAndGoodEmptyFile() {
     $adapter1 = new JsonFileStructureAdapter(__DIR__."/mocks", 'defaultEmpty.json');
-    $data = $adapter1->getValues();
+    $data = $adapter1->getItems();
     $this->assertTrue(count($data) === 0 );
   }
   public function testCreateGoodDirAndGoodSingleFile() {
     $adapter1 = new JsonFileStructureAdapter("./mocks", 'defaultSingle.json');
-    $data = $adapter1->getValues();
+    $data = $adapter1->getItems();
     $this->assertSame(count($data), 1);
     $this->assertTrue(isset($data['testSingle']) );
     $this->assertInstanceOf(SettingsItem::class, $data['testSingle']);
@@ -54,9 +54,9 @@ class JsonFileStructureAdapterTest extends TestCase
     $itemName = "testSingle";
     $adapter = new JsonFileStructureAdapter("./mocks", 'defaultSingle.json');
     $this->assertTrue($adapter->haveItem($itemName));
-    $this->assertSame(1, count($adapter->getValues()));
+    $this->assertSame(1, count($adapter->getItems()));
     $adapter->removeItem($itemName);
-    $this->assertSame(0, count($adapter->getValues()));
+    $this->assertSame(0, count($adapter->getItems()));
     $this->assertFalse($adapter->haveItem($itemName));
   }
   public function testGetDefaultValues() {
@@ -70,7 +70,7 @@ class JsonFileStructureAdapterTest extends TestCase
     if (file_exists("./mocks/{$itemName}.json")) unlink("./mocks/{$itemName}.json");
     copy("./mocks/defaultEmpty.json", "./mocks/{$itemName}.json");
     $adapter = new JsonFileStructureAdapter("./mocks", "{$itemName}.json");
-    $this->assertCount(0, $adapter->getValues());
+    $this->assertCount(0, $adapter->getItems());
     $item = new SettingsItem(['default' => 1]);
     $adapter->createItem($itemName, $item);
     $adapter->save();
@@ -108,7 +108,7 @@ class JsonFileStructureAdapterTest extends TestCase
     $itemName = "testSingle";
     $filename = 'defaultWithApiRestriciton';
     $adapter = new JsonFileStructureAdapter("./mocks", "{$filename}.json");
-    $names = $adapter->getItemNamesForApi();
+    $names = $adapter->getItemNamesForPublic();
     $this->assertSame(['testSingle'], $names);
     $this->assertNotSame(['testSingle', 'testSingleRestricted'], $names);
   }
@@ -116,8 +116,18 @@ class JsonFileStructureAdapterTest extends TestCase
     $itemName = "testSingle";
     $filename = 'defaultWithApiRestriciton';
     $adapter = new JsonFileStructureAdapter("./mocks", "{$filename}.json");
-    $names = $adapter->getDefaultValuesForApi();
+    $names = $adapter->getDefaultValuesForPublic();
     $this->assertSame(['testSingle' => '0'], $names);
     $this->assertNotSame(['testSingle' => '0', 'testSingleRestricted' => '1'], $names);
+  }
+
+  public function testChecks() {
+    $itemName = "testSingle";
+    $filename = 'defaultWithApiRestriciton';
+    $adapter = new JsonFileStructureAdapter("./mocks", "{$filename}.json");
+    $public = $adapter->isPublic('testSingle');
+    $this->assertTrue($public);
+    $public = $adapter->isPublic('testSingleRestricted');
+    $this->assertFalse($public);
   }
 }

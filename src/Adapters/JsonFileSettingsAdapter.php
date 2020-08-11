@@ -2,11 +2,12 @@
 
 namespace Garphild\SettingsManager\Adapters;
 
+use Garphild\SettingsManager\Errors\PropertyExistException;
 use Garphild\SettingsManager\Interfaces\iSettingsAdapter;
 
 class JsonFileSettingsAdapter extends JsonFile implements iSettingsAdapter {
-  public function __construct($basePath, $structureFileName) {
-    parent::__construct($basePath, $structureFileName);
+  public function __construct($basePath, $settingsFileName) {
+    parent::__construct($basePath, $settingsFileName);
     $this->load();
   }
 
@@ -36,6 +37,9 @@ class JsonFileSettingsAdapter extends JsonFile implements iSettingsAdapter {
 
   public function addItem($name, $value): JsonFileSettingsAdapter
   {
+    if (isset($this->parsed[$name])) {
+      throw new PropertyExistException(null, $name);
+    }
     $this->parsed[$name] = $value;
     return $this;
   }
@@ -45,8 +49,13 @@ class JsonFileSettingsAdapter extends JsonFile implements iSettingsAdapter {
     return $this->parsed;
   }
 
-  public function getItemValue($name)
+  public function getValue($name)
   {
     return $this->parsed[$name];
+  }
+
+  function getNames()
+  {
+    return array_keys($this->parsed);
   }
 }

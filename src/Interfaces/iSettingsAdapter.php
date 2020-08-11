@@ -9,5 +9,6 @@ interface iSettingsAdapter {
   function removeItem($name);
   function addItem($name, $value);
   function getValues();
-  function getItemValue($name);
+  function getNames();
+  function getValue($name);
 }
