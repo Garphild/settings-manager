@@ -36,8 +36,17 @@ class JsonFile {
   }
 
   function loadFile() {
-    $this->file = file_get_contents($this->getFilename());
-    $this->parsed = json_decode($this->file, true, 99999999);
+    if (file_exists($this->getFilename())) {
+      $this->file = file_get_contents($this->getFilename());
+      $this->parsed = json_decode($this->file, true, 99999999);
+    } else {
+      if (!$this->fileMustExists) {
+        $this->file = "{}";
+        $this->parsed = [];
+      } else {
+        throw new MissingFileException(null, $this->getFilename());
+      }
+    }
   }
 
   protected function saveFile() {
