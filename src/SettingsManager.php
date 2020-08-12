@@ -2,6 +2,7 @@
 
 namespace Garphild\SettingsManager;
 
+use Garphild\SettingsManager\Adapters\JsonFileStructureAdapter;
 use Garphild\SettingsManager\Adapters\MultipleGroupAdapter;
 use Garphild\SettingsManager\Errors\AdapterExistsException;
 use Garphild\SettingsManager\Errors\ItemNotAdapterException;
@@ -84,6 +85,33 @@ class SettingsManager implements iSettingsManagerFinal
       }
     }
     $this->name = $name;
+  }
+
+  static public function create($config = []) {
+    $defaultConfig = [
+      'structure' => [
+        'adapter' => 'json',
+        'path' => './config',
+        'file' => 'defaultStructure.json'
+      ],
+      'groups' => [
+
+      ],
+      'user' => [
+        'adapter' => null,
+      ]
+    ];
+    $currentConfig = array_merge_recursive($defaultConfig, $config);
+    $structureAdapter = null;
+    $groupsAdapter = new MultipleGroupAdapter();
+    $userAdapter = null;
+    switch($currentConfig['structure']['adapter']) {
+      case 'json':
+        $structureAdapter = new JsonFileStructureAdapter($currentConfig['structure']['path'], $currentConfig['structure']['file']);
+        break;
+      default:
+        throw new ItemNotAdapterException(null, $currentConfig['structure']['adapter']);
+    }
   }
 
   public function haveItem(string $name)
