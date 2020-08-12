@@ -252,10 +252,13 @@ class SettingsManager implements iSettingsManagerFinal
   function getValuesForPublic()
   {
     $arr = array_merge(
-      $this->structureAdapter->getDefaultValuesForPublic(),
-      $this->groupGetValuesForPublic(),
-      $this->userGetValuesForPublic(true)
+      $this->structure()->getDefaultValues(),
+      $this->groups()->getValues(),
+      $this->user()->getValues()
     );
+    foreach ($arr as $k=>$v) {
+      if (!$this->isPublic($k)) unset($arr[$k]);
+    }
     return $arr;
   }
 
