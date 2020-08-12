@@ -295,8 +295,8 @@ class SettingsManager implements iSettingsManagerFinal
   {
     return
       $this
-        ->structureSave()
-        ->groupSave()
-        ->userSave();
+        ->structure()->save()
+        ->groups()->save()
+        ->user()->save();
   }
 }

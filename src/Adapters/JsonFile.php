@@ -30,7 +30,7 @@ class JsonFile {
     if ($this->fileMustExists && !file_exists($this->getFilename())) {
       throw new MissingFileException("File %PARAM% not exists", $this->getFilename());
     }
-    if (!$this->fileMustExists) {
+    if (!$this->fileMustExists && !file_exists($this->getFilename())) {
       file_put_contents($this->getFilename(), "{}");
     }
   }
