@@ -70,6 +70,7 @@ class SettingsManager implements iSettingsManagerFinal
     // Single group adapter
     elseif ($groupSettingsAdapters instanceof iSettingsAdapter) {
       $this->groupSettingsAdapters = new MultipleGroupAdapter();
+      $this->groupSettingsAdapters->injectStructure($this->structureAdapter);
       $this->groupSettingsAdapters->addGroupAdapter('default', $groupSettingsAdapters);
     }
     if ($this->groupSettingsAdapters) {
