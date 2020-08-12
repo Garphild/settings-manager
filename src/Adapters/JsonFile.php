@@ -43,6 +43,7 @@ class JsonFile {
       if (!$this->fileMustExists) {
         $this->file = "{}";
         $this->parsed = [];
+        $this->saveFile();
       } else {
         throw new MissingFileException(null, $this->getFilename());
       }
