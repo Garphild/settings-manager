@@ -8,8 +8,8 @@ use Garphild\SettingsManager\Models\SettingsItem;
 use Garphild\SettingsManager\Errors\PropertyExistException;
 
 class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
-  public function __construct($basePath, $structureFileName) {
-    parent::__construct($basePath, $structureFileName);
+  public function __construct($basePath, $structureFileName, $enableCreateFile = false) {
+    parent::__construct($basePath, $structureFileName, $enableCreateFile);
     $this->load();
   }
 

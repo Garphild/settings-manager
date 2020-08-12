@@ -30,14 +30,24 @@ class JsonFile {
     if ($this->fileMustExists && !file_exists($this->getFilename())) {
       throw new MissingFileException("File %PARAM% not exists", $this->getFilename());
     }
-    if (!$this->fileMustExists) {
+    if (!$this->fileMustExists && !file_exists($this->getFilename())) {
       file_put_contents($this->getFilename(), "{}");
     }
   }
 
   function loadFile() {
-    $this->file = file_get_contents($this->getFilename());
-    $this->parsed = json_decode($this->file, true, 99999999);
+    if (file_exists($this->getFilename())) {
+      $this->file = file_get_contents($this->getFilename());
+      $this->parsed = json_decode($this->file, true, 99999999);
+    } else {
+      if (!$this->fileMustExists) {
+        $this->file = "{}";
+        $this->parsed = [];
+        $this->saveFile();
+      } else {
+        throw new MissingFileException(null, $this->getFilename());
+      }
+    }
   }
 
   protected function saveFile() {
