@@ -3,6 +3,7 @@ require("../vendor/autoload.php");
 
 use Garphild\SettingsManager\Adapters\JsonFileSettingsAdapter;
 use Garphild\SettingsManager\Adapters\JsonFileStructureAdapter;
+use Garphild\SettingsManager\Interfaces\iSettingsAdapter;
 use Garphild\SettingsManager\SettingsManager;
 use PHPUnit\Framework\TestCase;
 
@@ -41,79 +42,83 @@ class SettingsManagerAddItemsTest extends TestCase
   /**
    * Нельзя добавлять пользовательское значение, если оно не описано в структуре
    *
-   * @covers \Garphild\SettingsManager\SettingsManager::userAddValue
+   * @covers \Garphild\SettingsManager\SettingsManager::user
    */
   public function testUserAddItemWrong()
   {
-    $this->expectException(Garphild\SettingsManager\Errors\PropertyNotExistException::class);
-    $this->manager->userAddValue('testSingleNotExists', "2");
+    $this->expectException(Garphild\SettingsManager\Errors\PropertyNotDescriptedInStructureException::class);
+    $this->manager->user()->setValue('testSingleNotExists', "2");
   }
 
   /**
    * Нельзя добавлять значение для группы, если группы нету в списке
    *
-   * @covers \Garphild\SettingsManager\SettingsManager::userAddValue
+   * @covers \Garphild\SettingsManager\SettingsManager::groups
    */
   public function testGroupAddItemWrong()
   {
-    $this->expectException(Garphild\SettingsManager\Errors\PropertyNotExistException::class);
-    $this->manager->groupAddValue('testSingleNotExists', "2", "absentGroup");
+    $this->expectException(Garphild\SettingsManager\Errors\NoAdapterException::class);
+    $this->manager->groups()->setValue('testSingleNotExists', "2", "absentGroup");
   }
 
   /**
    * Нельзя добавлять значение для группы, если свойство не описано в структуре
    *
-   * @covers \Garphild\SettingsManager\SettingsManager::userAddValue
+   * @covers \Garphild\SettingsManager\SettingsManager::groups
    */
   public function testGroupAddItemWrong2()
   {
-    $this->expectException(Garphild\SettingsManager\Errors\PropertyNotExistException::class);
-    $this->manager->groupAddValue('testSingleNotExists', "2", $this->groupID);
+    $this->expectException(Garphild\SettingsManager\Errors\PropertyNotDescriptedInStructureException::class);
+    $this->manager->groups()->setValue('testSingleNotExists', "2", $this->groupID);
   }
 
   /**
    * Успешное добавление значения для пользователя
    *
-   * @covers \Garphild\SettingsManager\SettingsManager::userAddValue
+   * @covers \Garphild\SettingsManager\SettingsManager::user
    */
   public function testUserAddItemSuccess()
   {
     // Проверяем что свойства нет
-    $have = $this->manager->userHaveItem('testSingleForUserAdd');
+    $have = $this->manager->user()->haveItem('testSingleForUserAdd');
     $this->assertFalse($have);
-    $ret = $this->manager->userAddValue('testSingleForUserAdd', "2");
-    $this->assertInstanceOf(SettingsManager::class, $ret);
-    $have = $this->manager->userHaveItem('testSingleForUserAdd');
+    $ret = $this->manager->user()->setValue('testSingleForUserAdd', "2");
+    $this->assertInstanceOf(iSettingsAdapter::class, $ret);
+    $have = $this->manager->user()->haveItem('testSingleForUserAdd');
     $this->assertTrue($have);
-    $res = $this->manager->userGetValue('testSingleForUserAdd', true);
+    $res = $this->manager->user()->getValue('testSingleForUserAdd', true);
     $this->assertSame("2", $res);
-    $res = $this->manager->userGetValue('testSingleForUserAdd', false);
+    $res = $this->manager->user()->getValue('testSingleForUserAdd', false);
     $this->assertSame("2", $res);
-    $res = $this->manager->userGetValue('testSingleForUserAdd');
+    $res = $this->manager->user()->getValue('testSingleForUserAdd');
     $this->assertSame("2", $res);
+    $res = $this->manager->structure()->getValue('testSingleForUserAdd');
+    $this->assertNotSame("2", $res);
   }
 
   /**
-   * Успешное добавление значения для пользователя
+   * Успешное добавление значения для группы
    *
-   * @covers \Garphild\SettingsManager\SettingsManager::groupAddValue
+   * @covers \Garphild\SettingsManager\SettingsManager::groups
    */
   public function testGroupAddItemSuccess()
   {
     // Проверяем что свойства нет
-    $have = $this->manager->groupHaveItem('testSingleForGroupAdd');
+    $have = $this->manager->groups()->haveItem('testSingleForGroupAdd');
     $this->assertFalse($have);
-    $ret = $this->manager->groupAddValue('testSingleForGroupAdd', "1", $this->groupID);
-    $this->assertInstanceOf(SettingsManager::class, $ret);
-    $have = $this->manager->groupHaveItem('testSingleForGroupAdd');
+    $ret = $this->manager->groups()->setValue('testSingleForGroupAdd', "1", $this->groupID);
+    $this->assertInstanceOf(iSettingsAdapter::class, $ret);
+    $have = $this->manager->groups()->haveItem('testSingleForGroupAdd');
     $this->assertTrue($have);
-    $res = $this->manager->groupGetValue('testSingleForGroupAdd', $this->groupID);
+    $res = $this->manager->groups()->getValue('testSingleForGroupAdd', $this->groupID);
     $this->assertSame("1", $res);
-    $res = $this->manager->groupGetValue('testSingleForGroupAdd', $this->groupID, false);
+    $res = $this->manager->groups()->getValue('testSingleForGroupAdd', $this->groupID, false);
     $this->assertSame("1", $res);
-    $res = $this->manager->groupGetValue('testSingleForGroupAdd');
+    $res = $this->manager->groups()->getValue('testSingleForGroupAdd');
     $this->assertSame("1", $res);
-    $res = $this->manager->groupGetValue('testSingleForGroupAdd');
+    $res = $this->manager->groups()->getValue('testSingleForGroupAdd');
     $this->assertSame("1", $res);
+    $res = $this->manager->user()->haveItem('testSingleForGroupAdd');
+    $this->assertFalse($res);
   }
 }

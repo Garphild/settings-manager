@@ -1,6 +1,6 @@
 {
     "testSingle": {
-        "default": "0",
+        "default": "5",
         "dataType": "boolean",
         "module": "",
         "name": "",

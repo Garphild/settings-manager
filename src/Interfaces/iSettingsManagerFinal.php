@@ -13,4 +13,10 @@ interface iSettingsManagerFinal {
   function load();
   // SAVE PERSISTENT
   function save();
+  // Adapters
+  function user();
+  function groups();
+  function structure();
+  // Checks
+  public function haveItem(string $name);
 }

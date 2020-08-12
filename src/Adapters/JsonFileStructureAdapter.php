@@ -14,6 +14,9 @@ class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
   }
 
   function isPublic($name) {
+    if (!isset($this->parsed[$name])) {
+      throw new PropertyNotExistException(null, $name);
+    }
     return $this->parsed[$name]->isPublic();
   }
 
@@ -137,6 +140,6 @@ class JsonFileStructureAdapter extends JsonFile implements iStructureAdapter {
     if (!$this->haveItem($name)) {
       throw new PropertyNotExistException(null, $name);
     }
-    $this->parsed[$name]->default = $value;
+    $this->parsed[$name]->setDefaultValue($value);
   }
 }

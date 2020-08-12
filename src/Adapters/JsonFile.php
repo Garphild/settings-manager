@@ -11,8 +11,10 @@ class JsonFile {
   protected $parsed = [];
   protected $file = '';
   protected $fileMustExists = true;
+  protected $changed = false;
 
-  function __construct($basePath, $structureFileName) {
+  function __construct($basePath, $structureFileName, $allowCreateFile = false) {
+    if ($allowCreateFile) $this->enableCreateFile();
     $this->filename = $structureFileName;
     $lastChar = substr($basePath, -1);
     if ($lastChar === '/' || $lastChar === '\\') {
@@ -28,11 +30,19 @@ class JsonFile {
     if ($this->fileMustExists && !file_exists($this->getFilename())) {
       throw new MissingFileException("File %PARAM% not exists", $this->getFilename());
     }
+    if (!$this->fileMustExists) {
+      file_put_contents($this->getFilename(), "{}");
+    }
   }
 
   function loadFile() {
     $this->file = file_get_contents($this->getFilename());
     $this->parsed = json_decode($this->file, true, 99999999);
+  }
+
+  protected function saveFile() {
+    $this->file = json_encode($this->parsed, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT, 9999999);
+    file_put_contents($this->getFilename(), $this->file);
   }
 
   protected function getFilename()

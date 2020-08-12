@@ -3,6 +3,7 @@ require("../vendor/autoload.php");
 
 use Garphild\SettingsManager\Adapters\JsonFileSettingsAdapter;
 use Garphild\SettingsManager\Adapters\JsonFileStructureAdapter;
+use Garphild\SettingsManager\Errors\NoAdapterException;
 use Garphild\SettingsManager\SettingsManager;
 use PHPUnit\Framework\TestCase;
 
@@ -40,30 +41,30 @@ class SettingsManagerCheckItemsTest extends TestCase
 
   /**
    * @covers \Garphild\SettingsManager\SettingsManager::__construct
-   * @covers \Garphild\SettingsManager\SettingsManager::userHaveItem
+   * @covers \Garphild\SettingsManager\SettingsManager::user
    */
   public function testUserHaveValue()
   {
-    $haveValue = $this->manager->userHaveItem('testSingle');
+    $haveValue = $this->manager->user()->haveItem('testSingle');
     $this->assertTrue($haveValue);
-    $haveValue = $this->manager->userHaveItem('testSingleForUser');
+    $haveValue = $this->manager->user()->haveItem('testSingleForUser');
     $this->assertTrue($haveValue);
-    $notHaveValue = $this->manager->userHaveItem('testSingleForGroup');
+    $notHaveValue = $this->manager->user()->haveItem('testSingleForGroup');
     $this->assertFalse($notHaveValue);
   }
 
   /**
    * @covers \Garphild\SettingsManager\SettingsManager::__construct
-   * @covers \Garphild\SettingsManager\SettingsManager::groupHaveItem
+   * @covers \Garphild\SettingsManager\SettingsManager::groups
    */
-  public function testHaveValue()
+  public function testGroupHaveValue()
   {
     // Groups
-    $haveValue = $this->manager->groupHaveItem('testSingleForGroup');
+    $haveValue = $this->manager->groups()->haveItem('testSingleForGroup');
     $this->assertTrue($haveValue);
-    $haveValue = $this->manager->groupHaveItem('testSingleForUser');
+    $haveValue = $this->manager->groups()->haveItem('testSingleForUser');
     $this->assertFalse($haveValue);
-    $haveValue = $this->manager->groupHaveItem('testSingle');
+    $haveValue = $this->manager->groups()->haveItem('testSingle');
     $this->assertTrue($haveValue);
   }
 
@@ -78,26 +79,26 @@ class SettingsManagerCheckItemsTest extends TestCase
 
   /**
    * @throws \Garphild\SettingsManager\Errors\PropertyNotExistException
-   * @covers \Garphild\SettingsManager\SettingsManager::groupHaveItem
+   * @covers \Garphild\SettingsManager\SettingsManager::groups
    */
   function testExistsGroup() {
     // Group with exist ID
-    $haveValue = $this->manager->groupHaveItem('testSingleForGroup', $this->groupID);
+    $haveValue = $this->manager->groups()->haveItem('testSingleForGroup', $this->groupID);
     $this->assertTrue($haveValue);
-    $haveValue = $this->manager->groupHaveItem('testSingleForUser', $this->groupID);
+    $haveValue = $this->manager->groups()->haveItem('testSingleForUser', $this->groupID);
     $this->assertFalse($haveValue);
-    $haveValue = $this->manager->groupHaveItem('testSingle', $this->groupID);
+    $haveValue = $this->manager->groups()->haveItem('testSingle', $this->groupID);
     $this->assertTrue($haveValue);
   }
 
   /**
-   * @throws \Garphild\SettingsManager\Errors\PropertyNotExistException
-   * @covers \Garphild\SettingsManager\SettingsManager::groupHaveItem
+   * @throws NoAdapterException
+   * @covers \Garphild\SettingsManager\SettingsManager::groups
    */
   function testNotExistsGroup() {
     // Group with exist ID
-    $this->expectException(\Garphild\SettingsManager\Errors\PropertyNotExistException::class);
-    $haveValue = $this->manager->groupHaveItem('testSingleForUser', "absentGroup");
+    $this->expectException(NoAdapterException::class);
+    $haveValue = $this->manager->groups()->haveItem('testSingleForUser', "absentGroup");
     $this->assertTrue($haveValue);
   }
 

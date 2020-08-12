@@ -3,12 +3,19 @@
 namespace Garphild\SettingsManager\Interfaces;
 
 interface iSettingsAdapter {
-  function load();
-  function save();
-  function haveItem($name): bool;
-  function removeItem($name);
-  function addItem($name, $value);
-  function getValues();
-  function getNames();
-  function getValue($name);
+  public function load();
+  public function save();
+
+  public function haveItem($name): bool;
+  public function isChanged();
+
+  public function removeItem($name);
+
+  public function setValue($name, $value);
+
+  public function getValues();
+  public function getNames();
+  public function getValue($name);
+
+  public function injectStructure(iStructureAdapter $structureAdapter);
 }
