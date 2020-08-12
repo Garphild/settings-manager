@@ -4,3 +4,4 @@
 /phpDocumentor.phar
 tests/tmp
 .phpunit.result.cache
+coverage
