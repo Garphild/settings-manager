@@ -1,7 +1,7 @@
 {
     "name": "garphild/settings-manager",
     "description": "Settings manager",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "type": "library",
     "license": "MIT",
     "require-dev": {
