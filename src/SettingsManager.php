@@ -243,8 +243,8 @@ class SettingsManager implements iSettingsManagerFinal
   {
     $arr = array_merge(
       $this->structureAdapter->getDefaultValues(),
-      $this->groupGetValues(),
-      $this->userGetValues(true)
+      $this->groups()->getValues(),
+      $this->user()->getValues()
     );
     return $arr;
   }
@@ -296,10 +296,9 @@ class SettingsManager implements iSettingsManagerFinal
 
   function save()
   {
-    return
-      $this
-        ->structure()->save()
-        ->groups()->save()
-        ->user()->save();
+      $this->structure()->save();
+      $this->groups()->save();
+      $this->user()->save();
+      return $this;
   }
 }
